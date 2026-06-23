@@ -1,0 +1,27 @@
+import { Loader2 } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+interface LoadingSpinnerProps {
+  message?: string;
+  className?: string;
+  size?: "sm" | "md" | "lg";
+}
+
+const sizeMap = {
+  sm: "h-4 w-4",
+  md: "h-8 w-8",
+  lg: "h-12 w-12",
+};
+
+export function LoadingSpinner({
+  message = "로딩 중...",
+  className,
+  size = "md",
+}: LoadingSpinnerProps) {
+  return (
+    <div className={cn("flex flex-col items-center justify-center gap-3 py-12", className)}>
+      <Loader2 className={cn("animate-spin text-primary-600", sizeMap[size])} />
+      {message && <p className="text-sm text-gray-500">{message}</p>}
+    </div>
+  );
+}
