@@ -61,3 +61,9 @@
 - KPI 카드 상단 accent 라인 (지표별 고정 색상)
 - 심각/위험 단계: 카드 배경색 강조 (주황/빨강)
 - SPEC.md·CHANGELOG.md 갱신
+
+### KPI 카드 숫자·레이아웃
+- `AutoFitText` 컴포넌트: 숫자만 영역 초과 시 자동 축소
+- 카드 높이 통일, 숫자 하단 기준 정렬
+- Tailwind `content`에 `lib/**` 추가 — 심각(주황) 배경색 CSS 빌드 누락 수정
+- SPEC.md·CHANGELOG.md 갱신

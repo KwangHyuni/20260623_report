@@ -81,6 +81,13 @@ ERP CSV 데이터를 업로드하거나 샘플 데이터를 불러와 매출 지
 - **심각**: 주황 배경(`bg-orange-50`), **위험**: 빨강 배경(`bg-red-50`)
 - 카드 하단에 판정 기준 문구 표시
 
+#### KPI 카드 레이아웃·숫자 표시
+- `AutoFitText`: 숫자만 영역 초과 시 폰트 자동 축소 (제목·아이콘·뱃지 크기는 고정)
+- 카드 높이 통일 (`h-full`, `min-h-[8.5rem]`, 그리드 `auto-rows-fr`)
+- 숫자 영역: 고정 높이(`h-8`) + 카드 **하단 기준** 정렬 (`mt-auto`, `items-end`)
+- 설명/부제 영역: `min-h-10` 고정 슬롯 (`line-clamp`로 넘침 방지)
+- Tailwind `content`에 `lib/**` 포함 — 심각/위험 배경색 클래스 빌드 누락 방지
+
 #### 차트
 - **월별 매출 추이**: 라인 차트 (취소·반품 제외)
 - **채널별 매출**: 막대 그래프 (딥블루 파스텔 다색)
@@ -154,6 +161,10 @@ ERP CSV 데이터를 업로드하거나 샘플 데이터를 불러와 매출 지
 | `formatPercent` | 백분율 | `12.5%` |
 | `formatRawCellValue` | 원본 데이터 셀 (금액 컬럼 자동 변환) | `₩1,250,000` |
 
+### KPI 숫자 자동 축소 (`components/ui/AutoFitText.tsx`)
+- `ResizeObserver`로 컨테이너 너비 감지, 넘치면 폰트 크기를 단계적으로 축소
+- KPI 카드·요약 바 숫자에 적용 (최대 24px / 최소 11px)
+
 ## 7. KPI 상태 판정 (`lib/kpi-thresholds.ts`)
 
 | 함수 | 대상 |
@@ -185,3 +196,4 @@ npm run dev
 
 - Vercel 배포: SQLite는 `/tmp` 경로 사용 (휘발성). 자세한 내용은 `DEPLOY.md` 참고
 - GitHub 저장소 관리: `GITHUB.md` 참고
+- Tailwind `content` 경로에 `lib/**` 포함 필수 (`lib/kpi-thresholds.ts` 등 동적 클래스)
