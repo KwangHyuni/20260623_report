@@ -70,3 +70,36 @@ export const NAV_ITEMS = [
   { href: "/report", label: "보고서 분석" },
   { href: "/raw-data", label: "원본 데이터" },
 ] as const;
+
+/** 원본 데이터 컬럼 영문명 → 한글명 */
+export const COLUMN_LABELS: Record<string, string> = {
+  order_no: "주문번호",
+  customer_id: "고객ID",
+  order_date: "주문일자",
+  status: "주문상태",
+  channel: "판매채널",
+  payment_method: "결제수단",
+  total_amount_krw: "주문금액(원)",
+  order_item_id: "주문항목ID",
+  product_id: "상품ID",
+  qty: "수량",
+  unit_price_krw: "단가(원)",
+  discount_pct: "할인율(%)",
+  amount_krw: "금액(원)",
+  customer_name: "고객명",
+  customer_type: "고객유형",
+  city: "도시",
+  phone: "연락처",
+  email: "이메일",
+  join_date: "가입일자",
+  tier: "고객등급",
+  product_name: "상품명",
+  category: "카테고리",
+  brand: "브랜드",
+  unit_cost_krw: "원가(원)",
+  stock_qty: "재고수량",
+};
+
+export function getColumnLabel(column: string): string {
+  return COLUMN_LABELS[column] ?? column;
+}

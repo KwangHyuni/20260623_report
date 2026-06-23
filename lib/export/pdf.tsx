@@ -80,10 +80,11 @@ export function ReportPdfDocument({
 
       <Page size="A4" style={styles.page}>
         <Text style={styles.sectionTitle}>핵심 KPI</Text>
-        <Text style={styles.paragraph}>총 매출: {formatKRW(metrics.kpi.totalRevenue)}</Text>
-        <Text style={styles.paragraph}>주문 건수: {formatNumber(metrics.kpi.orderCount)}건</Text>
+        <Text style={styles.paragraph}>유효매출: {formatKRW(metrics.kpi.validRevenue)}</Text>
+        <Text style={styles.paragraph}>매출총이익: {formatKRW(metrics.kpi.grossProfit)} ({metrics.kpi.grossProfitRate.toFixed(1)}%)</Text>
         <Text style={styles.paragraph}>평균 주문금액: {formatKRW(metrics.kpi.avgOrderAmount)}</Text>
-        <Text style={styles.paragraph}>활성 고객 수: {formatNumber(metrics.kpi.activeCustomerCount)}명</Text>
+        <Text style={styles.paragraph}>활성 고객: {formatNumber(metrics.kpi.activeCustomerCount)}명</Text>
+        <Text style={styles.paragraph}>총거래액: {formatKRW(metrics.kpi.totalTransactionAmount)}</Text>
 
         <Text style={styles.sectionTitle}>채널별 매출</Text>
         <View style={styles.table}>

@@ -3,10 +3,19 @@
 import { useCallback, useEffect, useState } from "react";
 import { EmptyDataBanner } from "@/components/layout/EmptyDataBanner";
 import { LoadingSpinner } from "@/components/layout/LoadingSpinner";
-import { TABLE_CONFIG, type TableName } from "@/lib/constants";
+import { TABLE_CONFIG, getColumnLabel, type TableName } from "@/lib/constants";
 import { useDebounce } from "@/lib/hooks/useDebounce";
 import { ChevronLeft, ChevronRight, Search, ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, formatRawCellValue, KRW_COLUMNS } from "@/lib/utils";
+import {
+  PastelTable,
+  PastelTableHead,
+  PastelTableBody,
+  pastelThClass,
+  tableRowClass,
+  tableTdClass,
+} from "@/components/table/PastelTable";
+import { TABLE_HEADER_SORTABLE_CLASS } from "@/lib/chart-colors";
 
 const TABLES: TableName[] = ["orders", "order_items", "customers", "products"];
 
@@ -79,11 +88,11 @@ export default function RawDataPage() {
   };
 
   const SortIcon = ({ col }: { col: string }) => {
-    if (sortBy !== col) return <ArrowUpDown className="ml-1 inline h-3.5 w-3.5 text-gray-300" />;
+    if (sortBy !== col) return <ArrowUpDown className="ml-1 inline h-3.5 w-3.5 text-gray-500" />;
     return sortDir === "asc" ? (
-      <ArrowUp className="ml-1 inline h-3.5 w-3.5 text-primary-600" />
+      <ArrowUp className="ml-1 inline h-3.5 w-3.5 text-blue-900" />
     ) : (
-      <ArrowDown className="ml-1 inline h-3.5 w-3.5 text-primary-600" />
+      <ArrowDown className="ml-1 inline h-3.5 w-3.5 text-blue-900" />
     );
   };
 
@@ -162,37 +171,48 @@ export default function RawDataPage() {
           <LoadingSpinner message="데이터를 불러오는 중..." size="sm" />
         ) : data ? (
           <>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b bg-gray-50 text-left">
-                    {data.columns.map((col) => (
+            <div className="overflow-x-auto p-3">
+              <PastelTable>
+                <PastelTableHead>
+                  <tr className="text-left">
+                    {data.columns.map((col, colIndex) => (
                       <th
                         key={col}
-                        className="cursor-pointer whitespace-nowrap px-4 py-3 font-medium text-gray-600 hover:bg-gray-100 select-none"
+                        className={cn(
+                          pastelThClass(colIndex),
+                          TABLE_HEADER_SORTABLE_CLASS,
+                          "whitespace-nowrap"
+                        )}
                         onClick={() => handleSort(col)}
                       >
-                        {col}
+                        {getColumnLabel(col)}
                         <SortIcon col={col} />
                       </th>
                     ))}
                   </tr>
-                </thead>
-                <tbody>
+                </PastelTableHead>
+                <PastelTableBody>
                   {data.rows.map((row, i) => (
-                    <tr key={i} className="border-b border-gray-50 hover:bg-gray-50">
+                    <tr key={i} className={tableRowClass}>
                       {data.columns.map((col) => (
-                        <td key={col} className="whitespace-nowrap px-4 py-2 text-gray-700">
-                          {String(row[col] ?? "")}
+                        <td
+                          key={col}
+                          className={cn(
+                            tableTdClass,
+                            "whitespace-nowrap",
+                            KRW_COLUMNS.has(col) && "text-right tabular-nums"
+                          )}
+                        >
+                          {formatRawCellValue(col, row[col])}
                         </td>
                       ))}
                     </tr>
                   ))}
-                </tbody>
-              </table>
+                </PastelTableBody>
+              </PastelTable>
             </div>
 
-            <div className="flex flex-wrap items-center justify-between gap-2 border-t px-4 py-3">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-t bg-gray-50 px-4 py-3">
               <p className="text-sm text-gray-500">
                 총 {data.pagination.total.toLocaleString()}건 중{" "}
                 {((data.pagination.page - 1) * data.pagination.limit + 1).toLocaleString()}-

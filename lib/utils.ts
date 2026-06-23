@@ -13,8 +13,29 @@ export function formatKRW(value: number): string {
   }).format(value);
 }
 
+/** 원화 금액 컬럼 (원본 데이터 등) */
+export const KRW_COLUMNS = new Set([
+  "total_amount_krw",
+  "unit_price_krw",
+  "unit_cost_krw",
+  "amount_krw",
+]);
+
+export function formatRawCellValue(column: string, value: unknown): string {
+  if (value === null || value === undefined || value === "") return "";
+  if (KRW_COLUMNS.has(column)) {
+    const num = Number(value);
+    if (!Number.isNaN(num)) return formatKRW(num);
+  }
+  return String(value);
+}
+
 export function formatNumber(value: number): string {
   return new Intl.NumberFormat("ko-KR").format(value);
+}
+
+export function formatPercent(value: number, digits = 1): string {
+  return `${value.toFixed(digits)}%`;
 }
 
 export function formatDate(date: string | Date): string {
